@@ -1,13 +1,10 @@
 package ru.skillbranch.devintensive
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
-import ru.skillbranch.devintensive.extensions.TimeUnits
-import ru.skillbranch.devintensive.extensions.add
-import ru.skillbranch.devintensive.extensions.format
-import ru.skillbranch.devintensive.extensions.toUserView
+import ru.skillbranch.devintensive.extensions.*
 import ru.skillbranch.devintensive.models.*
+import ru.skillbranch.devintensive.utils.Utils
 import java.util.Date
 
 /**
@@ -16,10 +13,86 @@ import java.util.Date
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
+    // normal tests for hometask_2 with asserts
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun test_utils_parseFullName() {
+        val (firstName, lastName) = Utils.parseFullName(null)
+        assertEquals("null null", "$firstName $lastName")
+        val (firstName2, lastName2) = Utils.parseFullName("")
+        assertEquals("null null", "$firstName2 $lastName2")
+        val (firstName3, lastName3) = Utils.parseFullName(" ")
+        assertEquals("null null", "$firstName3 $lastName3")
+        val (firstName4, lastName4) = Utils.parseFullName("John")
+        assertEquals("John null", "$firstName4 $lastName4")
     }
+
+    @Test
+    fun test_toInitials() {
+        assertEquals("JD", Utils.toInitials("john", "doe"))
+        assertEquals("J", Utils.toInitials("John", null))
+        assertEquals(null, Utils.toInitials(null, null))
+        assertEquals(null, Utils.toInitials(" ", ""))
+    }
+
+    @Test
+    fun test_transliteration() {
+        assertEquals("Zhenya Stereotipov", Utils.transliteration("Женя Стереотипов"))
+        assertEquals("Amazing_Petr", Utils.transliteration("Amazing Петр", "_"))
+    }
+
+    @Test
+    fun test_builder() {
+        val user = User.Builder()
+            .id("1")
+            .firstName("Roman")
+            .lastName("Egorov")
+            .avatar("No")
+            .rating(10)
+            .respect(9)
+            .lastVisit(Date())
+            .isOnline(true)
+            .build()
+
+        user.printMe()
+    }
+
+    @Test
+    fun test_timeUnits_plurals() {
+        assertEquals("1 секунду", TimeUnits.SECOND.plural(1))
+        assertEquals("4 минуты", TimeUnits.MINUTE.plural(4))
+        assertEquals("19 часов", TimeUnits.HOUR.plural(19))
+        assertEquals("222 дня", TimeUnits.DAY.plural(222))
+    }
+
+    @Test
+    fun test_string_truncate() {
+        assertEquals("Bender Bending R...",
+            "Bender Bending Rodriguez — дословно «Сгибальщик Сгибающий Родригес»".truncate())
+        assertEquals("Bender Bending...",
+            "Bender Bending Rodriguez — дословно «Сгибальщик Сгибающий Родригес»".truncate(15))
+        assertEquals("A", "A     ".truncate(3))
+    }
+
+    @Test
+    fun test_string_stripHtml() {
+        assertEquals("Образовательное IT-сообщество Skill Branch",
+            "<p class=\"title\">Образовательное IT-сообщество Skill Branch</p>".stripHtml())
+        assertEquals("Образовательное IT-сообщество Skill Branch",
+            "<p>Образовательное       IT-сообщество Skill Branch</p>".stripHtml())
+    }
+
+    @Test
+    fun test_date_humanizeDiff(){
+        assertEquals("2 часа назад", Date().add(-2, TimeUnits.HOUR).humanizeDiff())
+        assertEquals("5 дней назад", Date().add(-5, TimeUnits.DAY).humanizeDiff())
+        assertEquals("через 2 минуты", Date().add(2, TimeUnits.MINUTE).humanizeDiff())
+        assertEquals("через 7 дней", Date().add(7, TimeUnits.DAY).humanizeDiff())
+        assertEquals("более года назад", Date().add(-400, TimeUnits.DAY).humanizeDiff())
+        assertEquals("более чем через год", Date().add(400, TimeUnits.DAY).humanizeDiff())
+    }
+
+    // methods without asserts - written by teacher at practical lesson
 
     @Test
     fun test_instance() {
@@ -85,7 +158,7 @@ class ExampleUnitTest {
             BaseMessage.makeMessage(user, Chat("0"), payload = "any text message", type = "text")
         val imgMessage =
             BaseMessage.makeMessage(user, Chat("0"), payload = "any image message", type = "image")
-        when(imgMessage) {
+        when (imgMessage) {
             is TextMessage -> println("this is text message")
             is ImageMessage -> println("this is image msg")
         }
