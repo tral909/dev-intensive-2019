@@ -83,7 +83,7 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun test_date_humanizeDiff(){
+    fun test_date_humanizeDiff() {
         assertEquals("2 часа назад", Date().add(-2, TimeUnits.HOUR).humanizeDiff())
         assertEquals("5 дней назад", Date().add(-5, TimeUnits.DAY).humanizeDiff())
         assertEquals("через 2 минуты", Date().add(2, TimeUnits.MINUTE).humanizeDiff())
