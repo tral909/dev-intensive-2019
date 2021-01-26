@@ -74,7 +74,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_primary_light"
+        android:background="?attr/colorAccentedSurface"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -186,7 +186,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color_divider_dark"
+        android:background="?attr/colorDivider"
         android:layout_marginLeft="@dimen/space_maximum_72" />
 
     <LinearLayout
@@ -205,7 +205,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_normal_16"
-            android:layout_toRightOf="@id/ic_avatar">
+            android:layout_toRightOf="@id/ic_avatar"
+            app:counterMaxLength="128">
 
             <EditText
                 style="@style/Profile.EditText.MultiLine"
@@ -220,7 +221,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color_divider_dark"
+        android:background="?attr/colorDivider"
         android:layout_marginLeft="@dimen/space_maximum_72" />
 
     <LinearLayout
